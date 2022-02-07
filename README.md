@@ -1,31 +1,46 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+<h1 align="center">Workout Tracking</h1>
 
-Welcome USER_NAME,
+[View the live project here.](#)
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **August 17, 2021**
+This project is designed towards the fulfilment of my code institute program. 
+The goal of the project is to design a console based workout tracker which logs the exercises along with the amount of calories a user burns from working out.
 
-## Reminders
+<h2 align="center">[image here]</h2>
 
-* Your code must be placed in the `run.py` file
-* Your dependencies must be placed in the `requirements.txt` file
-* Do not edit any of the other files or your code may not deploy properly
+## User Experience (UX)
 
-## Creating the Heroku app
+-   ### User stories
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
+    -   #### First time Visitor Goals
+        As a first-time user, I would like to:
 
-1. `heroku/python`
-2. `heroku/nodejs`
+        -	know what to expect from the application
+        -	know what information to provide
+        -	follow instructions provided and get appropriate feedback from action performed
+        -	get feedback when the information provided is incorrect
+        -	view the workout data along with calories burnt from workout
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
 
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
+    -   #### Returning Visitor Goals
+        As a returning user, I would like to:
 
-Connect your GitHub repository and deploy as normal.
+        -	view and select to perform an action from a list of actions 
+        -	get feedback based on information provided
+        -	request to view workout details by entering text like “ran 5k and danced for 30 minutes”
+        -	get feedback when the data request is processing.
+        -	view workout information including calories when I enter valid data
+        -	see an overview of the total exercises and calories I have burnt based on the data I have saved
+        -	choose to save workout information
 
-## Constraints
+-   ### Potential Features to Include
 
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
+    -	Input workout information from the terminal
+    -	Given work-out request retrieve burn
+    -	Save data in google sheet
+    -	Display workout and calories burnt summary to user.
 
------
-Happy coding!
+
+-   ### Initial Concept
+
+    The application is a console application which takes work out input from the user and get the calories based on the workout type and duration. I anticipate using google sheets API for storing the data provided by the user, and [nutritionix API](https://developer.nutritionix.com/) for retrieving the calorie information.
+  
