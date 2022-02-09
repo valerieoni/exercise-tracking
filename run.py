@@ -59,9 +59,10 @@ def perform_user_action(action: int):
     try:
         if action == 1:
             print("Great!, you have chosen to get calories\n")
-            print("We will need your age, height and weight data\n")
+            print("We will need your gender, age, height and weight data\n")
+            gender = request_gender()
             user_profile = request_profile()
-            print(user_profile)
+            print(f"gender entered is {gender} and profile: {user_profile}")
         elif action == 2:
             print("Amazing! you have chosen to view logs\n")
             user_name = request_username()
@@ -79,17 +80,64 @@ def request_profile():
     Asks user for height, weight and age data.
     If data entered is valid, creates Exercise instance
     """
-    print("Please enter your data in this format:")
-    print("age, height in cm, weight in kg")
-    print("Example data expected: 44, 162.56, 69.5\n")
+    print("\nNext is age,height in cm, weight in kg")
+    print("Example data expected: 44,162.56,69.5\n")
     while True:
-        data_str = input("Enter your age, height_in_cm, weight_in_kg: ")
+        data_str = input("Enter your age,height_in_cm,weight_in_kg: ")
         exercise_data = data_str.split(',')
         if validate_user_profile(exercise_data):
             print("Data is valid!!!")
             break
 
     return exercise_data
+
+
+def request_gender() -> str:
+    """
+    Prompts user for a value for gender.
+    validates value and returns gender if valid
+    else displays error message to user and
+    prompts for gender value again.
+
+    :returns str
+    """
+    gender_values = {
+        'm': "male",
+        'f': "female",
+    }
+    while True:
+        value = input(
+            "Enter your gender (type m for male f for female): "
+        )
+        value = value.strip()
+        if validate_gender(value, gender_values):
+            break
+
+    gender = value[0:1]
+    return gender_values[gender.lower()]
+
+
+def validate_gender(value: str, expected_values) -> bool:
+    """
+    validates gender value passed in.
+    raises ValueError if value is empty
+    or value is neither male nor female.
+
+    :returns bool
+    """
+    try:
+        if not value:
+            raise ValueError("You must enter a value for gender")
+        gender = value[0:1]
+        if gender.lower() not in expected_values:
+            raise ValueError(
+                f"Expected value is m or f, you provided {value}"
+            )
+    except ValueError as e:
+        print(f"\nInvalid action value: {e}\n")
+        return False
+
+    return True
 
 
 def request_username():
