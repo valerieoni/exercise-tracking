@@ -1,3 +1,5 @@
+from exercise import *
+
 def intro():
     """
     prints out the information about exercise tracker
@@ -63,6 +65,10 @@ def perform_user_action(action: int):
             gender = request_gender()
             user_profile = request_profile()
             print(f"gender entered is {gender} and profile: {user_profile}")
+            exercise = Exercise(
+                gender, user_profile['age'], user_profile['height'], user_profile['weight']
+            )
+            exercise.get_exercise_calories()
         elif action == 2:
             print("Amazing! you have chosen to view logs\n")
             user_name = request_username()
@@ -84,12 +90,17 @@ def request_profile():
     print("Example data expected: 44,162.56,69.5\n")
     while True:
         data_str = input("Enter your age,height_in_cm,weight_in_kg: ")
-        exercise_data = data_str.split(',')
+        data = data_str.split(',')
+        exercise_data = [i.strip() for i in data]
         if validate_user_profile(exercise_data):
             print("Data is valid!!!")
             break
 
-    return exercise_data
+    return {
+        'age': int(exercise_data[0]),
+        'height': float(exercise_data[1]),
+        'weight': float(exercise_data[2])
+    }
 
 
 def request_gender() -> str:
