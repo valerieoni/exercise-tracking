@@ -17,8 +17,8 @@ def validate_user_action(action: str):
             raise ValueError(
                 f"Expected value is 1 or 2. You provided {action}"
             )
-    except ValueError as e:
-        print(f"\nInvalid data: {e}, please try again\n")
+    except ValueError as error:
+        print(f"\nInvalid data: {error}, please try again\n")
         return False
 
     return True
@@ -36,8 +36,8 @@ def validate_user_profile(values):
                 f"Exactly 3 values required, you provided {len(values)}"
             )
         [float(value) for value in values]
-    except ValueError as e:
-        print(f"Invalid data: {e}, please try again")
+    except ValueError as error:
+        print(f"Invalid data: {error}, please try again")
         return False
 
     return True
@@ -59,10 +59,11 @@ def validate_username(value: str):
         user_length = len(value)
         if user_length < 8 or user_length > 18:
             raise ValueError(
-                f"Username must be between 8 and 18 characters"
+                "Username must be between 8 and 18 characters. "
+                f"you entered {user_length} characters"
             )
-    except ValueError as e:
-        print(f"\nInvalid data: {e}, please try again\n")
+    except ValueError as error:
+        print(f"\nInvalid data: {error}, please try again\n")
         return False
 
     return True
@@ -84,8 +85,8 @@ def validate_gender(value: str, expected_values) -> bool:
             raise ValueError(
                 f"Expected value is m or f, you provided {value}"
             )
-    except ValueError as e:
-        print(f"\nInvalid action value: {e}\n")
+    except ValueError as error:
+        print(f"\nInvalid action value: {error}\n")
         return False
 
     return True

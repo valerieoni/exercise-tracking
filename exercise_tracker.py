@@ -1,5 +1,6 @@
-from validator import *
+from validator import validate_gender, validate_user_profile, validate_username
 from exercise import Exercise
+from tabulate import tabulate
 
 
 class ExerciseTracker:
@@ -8,8 +9,9 @@ class ExerciseTracker:
 
     ---
     Attributes:
-        user_name (str): Username set from user input. Default at instance creation is None
-        profile (dict): Initialized as an empty dictionary at instance creation. values set from use input
+    user_name (str): Username set from user input.
+    Default at instance creation is an empty dictionary
+    profile (dict): dictionary values set from use input
     """
 
     def __init__(self):
@@ -34,9 +36,15 @@ class ExerciseTracker:
             print(f"profile: {profile}")
             if self.exercise is None:
                 self.exercise = Exercise(
-                    profile['gender'], profile['age'], profile['height'], profile['weight']
+                    profile['gender'], profile['age'],
+                    profile['height'], profile['weight']
                 )
-            self.exercise.get_exercise_calories()
+            data = self.exercise.get_exercise_stats()
+            if data is not None:
+                print(tabulate(
+                    data, 
+                    headers=["date", "exercise", "duration in mins", "calories"]
+                    ))
         elif action == 2:
             print("Amazing! you have chosen to view logs\n")
             user_name = self.get_user_name()

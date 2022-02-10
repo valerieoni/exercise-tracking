@@ -1,5 +1,5 @@
 from exercise_tracker import ExerciseTracker
-from user_action import *
+from validator import validate_user_action
 
 
 def intro():
@@ -14,6 +14,24 @@ def intro():
     print("- view logs you previously entered\n")
     print("You will be required to enter a valid username "
           "to view logs or save new exercise data\n")
+
+
+def get_user_action() -> int:
+    """
+    Requests action to perform from user.
+
+    :returns int
+    """
+    while True:
+        print("What would you like to do?\n")
+        print("1 - get calories burnt\n")
+        print("2 - view exercise logs\n")
+
+        user_action = input("Enter 1 or 2 to continue: ")
+        if validate_user_action(user_action):
+            break
+
+    return int(user_action)
 
 
 def run_program():
@@ -31,8 +49,8 @@ def run_program():
 
     try:
         new_exercise_tracker.perform_user_action(action)
-    except ValueError as e:
-        print(f"\nInvalid action value: {e}\n")
+    except ValueError as error:
+        print(f"\nInvalid action value: {error}\n")
         get_user_action()
 
 
