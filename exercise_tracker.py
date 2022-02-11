@@ -63,7 +63,7 @@ class ExerciseTracker:
                 print(f"Sorry, user name {user_name} does not exist.")
                 print("would you like to know amount of calories burnt instead?")
                 while True:
-                    response = input("to continue please enter Y/N: ")
+                    response = input("to continue please enter Y/N:\n")
                     if validate_yes_no(response):
                         break
                     else:
@@ -91,7 +91,7 @@ class ExerciseTracker:
         print("\nNext is age,height in cm, weight in kg")
         print("Example data expected: 44,162.56,69.5\n")
         while True:
-            data_str = input("Enter your age,height_in_cm,weight_in_kg: ")
+            data_str = input("Enter your age,height_in_cm,weight_in_kg:\n")
             data = data_str.split(',')
             exercise_data = [i.strip() for i in data]
             if validate_user_profile(exercise_data):
@@ -121,7 +121,7 @@ class ExerciseTracker:
         }
         while True:
             value = input(
-                "Enter your gender (type m for male f for female): "
+                "Enter your gender (type m/f for male/female):\n"
             )
             value = value.strip()
             if validate_gender(value, gender_values):
@@ -141,7 +141,7 @@ class ExerciseTracker:
 
         print("Your user name is required to retrieve/save your information.\n")
         while True:
-            value = input("Please enter username: ")
+            value = input("Please enter username:\n")
             user_name = value.strip()
             if validate_username(user_name):
                 self.user_name = user_name
@@ -161,7 +161,7 @@ class ExerciseTracker:
         print(f"Would you like to save workout data?\n{data}")
 
         while True:
-            response = input("Enter Y/N: ")
+            response = input("Enter Y/N:\n")
             if validate_yes_no(response):
                 print(f"you have answered {response}")
                 break

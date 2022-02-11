@@ -27,7 +27,7 @@ def get_user_action() -> int:
         print("1 - get calories burnt\n")
         print("2 - view exercise logs\n")
 
-        user_action = input("Enter 1 or 2 to continue: ")
+        user_action = input("Enter 1 or 2 to continue:\n")
         if validate_user_action(user_action):
             break
 
@@ -55,7 +55,7 @@ def run_program():
 
     while True:
         print("Would you like to perform another action?")
-        response = input("Please enter Y/N to continue: ")
+        response = input("Please enter Y/N to continue:\n")
         if validate_yes_no(response) and response.lower() in ['yes', 'y']:
             action = get_user_action()
             new_exercise_tracker.perform_user_action(action)
