@@ -51,3 +51,12 @@ def update_workout_worksheet(data):
     WORKOUT_SHEET.append_rows(data)
     print("workout successfully added to the workout worksheet.\n")
 
+def is_existing_user(username) -> bool:
+    """
+    gets the lists of users from the worksheet,
+    extracts the first column which is the username and
+    returns true if username is in the list, returns false otherwise
+    """
+    users = get_users()
+    user_names = [user[0] for user in users]
+    return username in user_names

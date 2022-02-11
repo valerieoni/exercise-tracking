@@ -4,7 +4,8 @@ from validator import validate_gender, validate_user_profile, \
     validate_username, validate_yes_no
 from exercise import Exercise
 from tabulate import tabulate
-from spreadsheet import get_users, update_users_worksheet, update_workout_worksheet
+from spreadsheet import get_users, update_users_worksheet, \
+update_workout_worksheet, is_existing_user
 
 
 class ExerciseTracker:
@@ -154,9 +155,7 @@ class ExerciseTracker:
             print("Processing workout data for saving......")
             for workout in data:
                 workout.insert(0, username)
-            users = get_users()
-            user_names = [user[0] for user in users]
-            if username not in user_names:
+            if not is_existing_user(username):
                 print(f"Creating new user record for {username}\n")
                 today = datetime.datetime.now()
                 today_formatted = today.strftime("%Y-%m-%d")
