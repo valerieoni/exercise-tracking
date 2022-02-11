@@ -98,5 +98,4 @@ class Exercise:
         return {
             "x-app-id": os.getenv('NUTRITIONIX_APP_ID'),
             "x-app-key": os.getenv('NUTRITIONIX_API_KEY'),
-            "x-remote-user-id": '0',
         }
