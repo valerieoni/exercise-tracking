@@ -31,6 +31,19 @@ def get_users():
     users = USERS_SHEET.get_all_values()
     return users[1:]
 
+def get_user_workouts(user_name):
+    """
+    get workouts from workouts worksheet
+    filter result to retrieve and return the
+    workouts data for the user_name passed in.
+    """
+    print("Fetching workouts record.......")
+    workouts = WORKOUT_SHEET.get_all_values()
+    user_workouts = []
+    for workout in workouts[1:]:
+        if workout[0] == user_name:
+            user_workouts.append(workout[1:])
+    return user_workouts
 
 def update_users_worksheet(data):
     """
@@ -51,7 +64,7 @@ def update_workout_worksheet(data):
     WORKOUT_SHEET.append_rows(data)
     print("workout successfully added to the workout worksheet.\n")
 
-def is_existing_user(username) -> bool:
+def is_existing_user(user_name) -> bool:
     """
     gets the lists of users from the worksheet,
     extracts the first column which is the username and
@@ -59,4 +72,4 @@ def is_existing_user(username) -> bool:
     """
     users = get_users()
     user_names = [user[0] for user in users]
-    return username in user_names
+    return user_name in user_names

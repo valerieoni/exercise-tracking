@@ -5,7 +5,7 @@ from validator import validate_gender, validate_user_profile, \
 from exercise import Exercise
 from tabulate import tabulate
 from spreadsheet import get_users, update_users_worksheet, \
-update_workout_worksheet, is_existing_user
+update_workout_worksheet, is_existing_user, get_user_workouts
 
 
 class ExerciseTracker:
@@ -55,7 +55,10 @@ class ExerciseTracker:
             print("Amazing! you have chosen to view logs\n")
             user_name = self.get_user_name()
             if is_existing_user(user_name):
-                print(f"Fetching exercise record.......")
+               user_workouts = get_user_workouts(user_name)
+               print(tabulate(
+                   user_workouts,
+                   headers=["date", "exercise", "duration in mins", "calories"]))
             else:
                 print(f"Sorry, user name {user_name} does not exist.")
                 print("would you like to know amount of calories burnt instead?")
