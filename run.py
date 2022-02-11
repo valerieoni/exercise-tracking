@@ -1,5 +1,5 @@
 from exercise_tracker import ExerciseTracker
-from validator import validate_user_action
+from validator import validate_user_action, validate_yes_no
 
 
 def intro():
@@ -53,5 +53,14 @@ def run_program():
         print(f"\nInvalid action value: {error}\n")
         get_user_action()
 
+    while True:
+        print("Would you like to perform another action?")
+        response = input("Please enter Y/N to continue: ")
+        if validate_yes_no(response) and response.lower() in ['yes', 'y']:
+            action = get_user_action()
+            new_exercise_tracker.perform_user_action(action)
+        else:
+            print("Good Bye!!!")
+            break
 
 run_program()
