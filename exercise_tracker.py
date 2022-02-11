@@ -54,7 +54,19 @@ class ExerciseTracker:
         elif action == 2:
             print("Amazing! you have chosen to view logs\n")
             user_name = self.get_user_name()
-            print(user_name)
+            if is_existing_user(user_name):
+                print(f"Fetching exercise record.......")
+            else:
+                print(f"Sorry, user name {user_name} does not exist.")
+                print("would you like to know amount of calories burnt instead?")
+                while True:
+                    response = input("to continue please enter Y/N: ")
+                    if validate_yes_no(response):
+                        break
+                    else:
+                        print("You have chosen not to save data.\n")
+                if response.lower() in ['yes', 'y']:
+                    self.perform_user_action(1)
         else:
             raise ValueError("You must have provided a wrong value for action")
 
@@ -129,6 +141,7 @@ class ExerciseTracker:
             value = input("Please enter username: ")
             user_name = value.strip()
             if validate_username(user_name):
+                self.user_name = user_name
                 break
 
         return user_name
