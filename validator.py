@@ -90,3 +90,27 @@ def validate_gender(value: str, expected_values) -> bool:
         return False
 
     return True
+
+def validate_yes_no(value: str) -> bool:
+    """
+    gets the first letter of the value
+    changes value to lowercase and validates
+    value. returns true if first letter of the value
+    is y or n.
+
+    :returns bool
+    """
+    try:
+        if not value:
+            raise ValueError("You have not entered a value "
+                             "Please enter Y/N")
+        response = value[0:1]
+        if response.lower() not in ['y', 'n']:
+            raise ValueError(
+                f"Expected value is either Y, Yes, N or No, you provided {value}"
+            )
+    except ValueError as error:
+        print(f"\nInvalid action value: {error}\n")
+        return False
+
+    return True

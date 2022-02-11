@@ -24,6 +24,30 @@ def get_workouts():
 
 def get_users():
     """
-    Reads and returns list of users
+    gets a list of users from worksheet
+    returns the list excluding the
+    first row which is the column names
     """
-    return USERS_SHEET.get_all_values()
+    users = USERS_SHEET.get_all_values()
+    return users[1:]
+
+
+def update_users_worksheet(data):
+    """
+    updates the users worksheet, and adds
+     a new row with the list data provided
+    """
+    print("Updating users worksheet.......\n")
+    USERS_SHEET.append_row(data)
+    print("users worksheet successfully updated.\n")
+
+
+def update_workout_worksheet(data):
+    """
+    updates the workouts worksheet, and adds
+     a new row with the list data provided
+    """
+    print("Updating workout worksheet.......\n")
+    WORKOUT_SHEET.append_rows(data)
+    print("workout successfully added to the workout worksheet.\n")
+

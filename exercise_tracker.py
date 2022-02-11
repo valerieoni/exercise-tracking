@@ -1,6 +1,10 @@
-from validator import validate_gender, validate_user_profile, validate_username
+import datetime
+
+from validator import validate_gender, validate_user_profile, \
+    validate_username, validate_yes_no
 from exercise import Exercise
 from tabulate import tabulate
+from spreadsheet import get_users, update_users_worksheet, update_workout_worksheet
 
 
 class ExerciseTracker:
@@ -42,9 +46,10 @@ class ExerciseTracker:
             data = self.exercise.get_exercise_stats()
             if data is not None:
                 print(tabulate(
-                    data, 
+                    data,
                     headers=["date", "exercise", "duration in mins", "calories"]
-                    ))
+                ))
+                self.request_to_save(data)
         elif action == 2:
             print("Amazing! you have chosen to view logs\n")
             user_name = self.get_user_name()
@@ -75,14 +80,15 @@ class ExerciseTracker:
             exercise_data = [i.strip() for i in data]
             if validate_user_profile(exercise_data):
                 print("Data is valid!!!")
+                self.profile = {
+                    'gender': gender,
+                    'age': int(exercise_data[0]),
+                    'height': float(exercise_data[1]),
+                    'weight': float(exercise_data[2])
+                }
                 break
 
-        return {
-            'gender': gender,
-            'age': int(exercise_data[0]),
-            'height': float(exercise_data[1]),
-            'weight': float(exercise_data[2])
-        }
+        return self.profile
 
     def request_gender(self) -> str:
         """
@@ -117,7 +123,7 @@ class ExerciseTracker:
         if self.user_name is not None:
             return self.user_name
 
-        print("We will need your user name to retrieve your information.\n")
+        print("Your user name is required to retrieve/save your information.\n")
         while True:
             value = input("Please enter username: ")
             user_name = value.strip()
@@ -125,3 +131,42 @@ class ExerciseTracker:
                 break
 
         return user_name
+
+    def request_to_save(self, data):
+        """
+        Prompts user to save data and if yes,
+        it calls get_username to get the username.
+        inserts user_name into the first column of the workout data
+        saves the user data if not already in the worksheet
+        and save updated workout data to the workout sheet
+        by calling the save_data from the spreadsheet instance
+        """
+        print(f"Would you like to save workout data?\n{data}")
+
+        while True:
+            response = input("Enter Y/N: ")
+            if validate_yes_no(response):
+                print(f"you have answered {response}")
+                break
+
+        if response.lower() in ['yes', 'y']:
+            username = self.get_user_name()
+            print("Processing workout data for saving......")
+            for workout in data:
+                workout.insert(0, username)
+            users = get_users()
+            user_names = [user[0] for user in users]
+            if username not in user_names:
+                print(f"Creating new user record for {username}\n")
+                today = datetime.datetime.now()
+                today_formatted = today.strftime("%Y-%m-%d")
+                user_data = [
+                    username,
+                    today_formatted,
+                    self.profile['gender'],
+                    self.profile['age'],
+                    self.profile['weight'],
+                    self.profile['height']
+                ]
+                update_users_worksheet(user_data)
+            update_workout_worksheet(data)
