@@ -57,7 +57,6 @@ class ExerciseTracker:
     def get_calories(self):
         print("Great!, you have chosen to get calories\n")
         profile = self.get_user_profile()
-        print(f"profile: {profile}")
         if self.exercise is None:
             self.exercise = Exercise(
                 profile['gender'], profile['age'],

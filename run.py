@@ -28,7 +28,8 @@ def end_program():
     click.clear()
     print('\n')
     print("Thank you for using Exercise Tracker. Good Bye!!!".center(TERMINAL_WIDTH))
-    print('\n\n'+ Fore.GREEN + f"{'*' * 10}\033[01m The natural language search "
+    print("\n\n")
+    print(Fore.GREEN + f"{'*' * 10}\033[01m The natural language search "
                        f"is powered by nutriontix.com {'*' * 10}".center(TERMINAL_WIDTH))
 
 
@@ -69,7 +70,7 @@ def run_program():
     try:
         new_exercise_tracker.perform_user_action(action)
     except ValueError as error:
-        print(f"\nInvalid action value: {error}\n")
+        print_error(f"Invalid action value: {error}")
         get_user_action()
 
     while True:
