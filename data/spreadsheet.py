@@ -73,3 +73,23 @@ def is_existing_user(user_name) -> bool:
     users = get_users()
     user_names = [user[0] for user in users]
     return user_name in user_names
+
+
+def get_user(user_name: str):
+    """
+    Returns a dictionary object of the user's profile
+    if user exists otherwise it returns None
+    """
+    users = get_users()
+    for user in users:
+        if user[0] == user_name:
+            return {
+                'user_name': user[0],
+                'date_created': user[1],
+                'gender': user[2],
+                'age': user[3],
+                'weight': user[4],
+                'height': user[5]
+            }
+
+    return None
