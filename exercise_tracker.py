@@ -5,7 +5,7 @@ from validator import validate_gender, validate_user_profile, \
 from exercise import Exercise
 from tabulate import tabulate
 from spreadsheet import get_users, update_users_worksheet, \
-update_workout_worksheet, is_existing_user, get_user_workouts
+    update_workout_worksheet, is_existing_user, get_user_workouts
 
 
 class ExerciseTracker:
@@ -36,42 +36,43 @@ class ExerciseTracker:
         displays the exercise log.
         """
         if action == 1:
-            print("Great!, you have chosen to get calories\n")
-            profile = self.get_user_profile()
-            print(f"profile: {profile}")
-            if self.exercise is None:
-                self.exercise = Exercise(
-                    profile['gender'], profile['age'],
-                    profile['height'], profile['weight']
-                )
-            data = self.exercise.get_exercise_stats()
-            if data is not None:
-                print(tabulate(
-                    data,
-                    headers=["date", "exercise", "duration in mins", "calories"]
-                ))
-                self.request_to_save(data)
+            self.get_calories()
         elif action == 2:
-            print("Amazing! you have chosen to view logs\n")
-            user_name = self.get_user_name()
-            if is_existing_user(user_name):
-               user_workouts = get_user_workouts(user_name)
-               print(tabulate(
-                   user_workouts,
-                   headers=["date", "exercise", "duration in mins", "calories"]))
-            else:
-                print(f"Sorry, user name {user_name} does not exist.")
-                print("would you like to know amount of calories burnt instead?")
-                while True:
-                    response = input("to continue please enter Y/N:\n")
-                    if validate_yes_no(response):
-                        break
-                    else:
-                        print("You have chosen not to save data.\n")
-                if response.lower() in ['yes', 'y']:
-                    self.perform_user_action(1)
+            self.view_exercise_logs()
         else:
             raise ValueError("You must have provided a wrong value for action")
+
+    def view_exercise_logs(self):
+        print("Amazing! you have chosen to view logs\n")
+        user_name = self.get_user_name()
+        if not is_existing_user(user_name):
+            print(f"No result found for user {user_name}!")
+            return
+
+        user_workouts = get_user_workouts(user_name)
+        print(tabulate(
+            user_workouts,
+            headers=["date", "exercise", "duration in mins", "calories"]))
+
+    def get_calories(self):
+        print("Great!, you have chosen to get calories\n")
+        profile = self.get_user_profile()
+        print(f"profile: {profile}")
+        if self.exercise is None:
+            self.exercise = Exercise(
+                profile['gender'], profile['age'],
+                profile['height'], profile['weight']
+            )
+        data = self.exercise.get_exercise_stats()
+        if not data or data is None:
+            print("No result found")
+            return
+
+        print(tabulate(
+            data,
+            headers=["date", "exercise", "duration in mins", "calories"]
+        ))
+        self.request_to_save(data)
 
     def get_user_profile(self):
         """
@@ -121,7 +122,7 @@ class ExerciseTracker:
         }
         while True:
             value = input(
-                "Enter your gender (type m/f for male/female):\n"
+                "Enter your gender(male/female):\n"
             )
             value = value.strip()
             if validate_gender(value, gender_values):
