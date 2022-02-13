@@ -1,5 +1,5 @@
 import time
-import sys
+import click
 from exercise_tracker import ExerciseTracker
 from validator import validate_user_action, validate_yes_no
 from helpers.style import *
@@ -22,11 +22,14 @@ def intro():
 
 
 def end_program():
+    """
+    displays exit text to user and exits the program after 2 seconds
+    """
+    click.clear()
+    print('\n')
     print("Thank you for using Exercise Tracker. Good Bye!!!".center(TERMINAL_WIDTH))
-    print(Fore.GREEN + f"{'*' * 10}\033[01m The natural language search "
+    print('\n\n'+ Fore.GREEN + f"{'*' * 10}\033[01m The natural language search "
                        f"is powered by nutriontix.com {'*' * 10}".center(TERMINAL_WIDTH))
-    time.sleep(2)
-    os.system('clear')
 
 
 def get_user_action() -> int:
@@ -60,7 +63,7 @@ def run_program():
     print('***'.center(TERMINAL_WIDTH, '='))
     intro()
     new_exercise_tracker = ExerciseTracker()
-    time.sleep(2)
+    time.sleep(1)
     action = get_user_action()
 
     try:
@@ -79,5 +82,5 @@ def run_program():
             end_program()
             break
 
-
-run_program()
+if __name__ == '__main__':
+    run_program()
