@@ -1,12 +1,18 @@
 import datetime
-
+import enum
 from helpers.validator import validate_gender, validate_user_profile, \
     validate_username, validate_yes_no
 from api.exercise import Exercise
 from tabulate import tabulate
-from data.spreadsheet import get_users, update_users_worksheet, \
-    update_workout_worksheet, is_existing_user, get_user_workouts
+import data.spreadsheet as sheet
+import data.user as User
+import helpers.style as style
 
+class Menu(enum.Enum):
+    CALORIES = 1
+    EXERCISE_LOGS = 2
+    EXIT = 3
+    
 
 class ExerciseTracker:
     """
@@ -19,15 +25,15 @@ class ExerciseTracker:
     profile (dict): dictionary values set from use input
     """
 
-    def __init__(self):
+    def __init__(self, user: User):
         """
         Sets default values for the instance attributes.
         """
         self.exercise = None
-        self.user_name = None
-        self.profile = {}
+        self.user = user
+        self.user_name = user.user_name
 
-    def perform_user_action(self, action: int):
+    def perform_user_action(self, action: Menu):
         """
         Valid action expected is 1 or 2. Raises ValueError if value is invalid.
         if action is 1 it creates an Exercise instance if not existing and
@@ -35,27 +41,27 @@ class ExerciseTracker:
         Else if action is 2 then prompt user for username and
         displays the exercise log.
         """
-        if action == 1:
+        if action == Menu.CALORIES:
             self.get_calories()
-        elif action == 2:
+        elif action == Menu.EXERCISE_LOGS:
             self.view_exercise_logs()
         else:
             raise ValueError("You must have provided a wrong value for action")
 
     def view_exercise_logs(self):
-        print("Amazing! you have chosen to view logs\n")
-        user_name = self.get_user_name()
-        if not is_existing_user(user_name):
-            print(f"No result found for user {user_name}!")
+        print("\nYou have chosen to view exercise logs\n")
+        if not self.user.is_current_user:
+            style.print_error("No result found for "
+            f"user {self.user.user_name}!\n")
             return
-
-        user_workouts = get_user_workouts(user_name)
+            
+        user_workouts = sheet.get_user_workouts(self.user.user_name)
         print(tabulate(
             user_workouts,
             headers=["date", "exercise", "duration in mins", "calories"]))
 
     def get_calories(self):
-        print("Great!, you have chosen to get calories\n")
+        print("\nYou have chosen to get calories\n")
         profile = self.get_user_profile()
         if self.exercise is None:
             self.exercise = Exercise(
@@ -64,7 +70,7 @@ class ExerciseTracker:
             )
         data = self.exercise.get_exercise_stats()
         if not data or data is None:
-            print("No result found")
+            style.print_error("  No result found!!!\n")
             return
 
         print(tabulate(
@@ -82,72 +88,16 @@ class ExerciseTracker:
         If data entered is valid, creates Exercise instance.
         """
 
-        if len(self.profile) != 0:
-            return self.profile
+        if len(self.user.profile) != 0:
+            return self.user.profile
 
-        print("We will need your gender, age, height and weight data")
-
-        gender = self.request_gender()
-        print("\nNext is age,height in cm, weight in kg")
-        print("Example data expected: 44,162.56,69.5\n")
-        while True:
-            data_str = input("Enter your age,height_in_cm,weight_in_kg:\n")
-            data = data_str.split(',')
-            exercise_data = [i.strip() for i in data]
-            if validate_user_profile(exercise_data):
-                print("Data is valid!!!")
-                self.profile = {
-                    'gender': gender,
-                    'age': int(exercise_data[0]),
-                    'height': float(exercise_data[1]),
-                    'weight': float(exercise_data[2])
-                }
-                break
-
-        return self.profile
-
-    def request_gender(self) -> str:
-        """
-        Prompts user for a value for gender.
-        validates value and returns gender if valid
-        else displays error message to user and
-        prompts for gender value again.
-
-        :returns str
-        """
-        gender_values = {
-            'm': "male",
-            'f': "female",
-        }
-        while True:
-            value = input(
-                "Enter your gender(male/female):\n"
-            )
-            value = value.strip()
-            if validate_gender(value, gender_values):
-                break
-
-        gender = value[0:1]
-        return gender_values[gender.lower()]
-
-    def get_user_name(self):
-        """
-        Prompts user from username.
-        checks username entered is valid data and
-        returns username if valid otherwise prompts user for username
-        """
-        if self.user_name is not None:
-            return self.user_name
-
-        print("Your user name is required to retrieve/save your information.\n")
-        while True:
-            value = input("Please enter username:\n")
-            user_name = value.strip()
-            if validate_username(user_name):
-                self.user_name = user_name
-                break
-
-        return user_name
+        print("We will need your gender, age, height and weight data\n")
+        self.user.set_gender()
+        self.user.set_age()
+        self.user.set_height()
+        self.user.set_weight()
+       
+        return self.user.profile
 
     def request_to_save(self, data):
         """
@@ -158,30 +108,27 @@ class ExerciseTracker:
         and save updated workout data to the workout sheet
         by calling the save_data from the spreadsheet instance
         """
-        print(f"Would you like to save workout data?\n{data}")
+        print(f"\nWould you like to save workout stats?\n")
 
         while True:
             response = input("Enter Y/N:\n")
             if validate_yes_no(response):
-                print(f"you have answered {response}")
                 break
 
         if response.lower() in ['yes', 'y']:
-            username = self.get_user_name()
-            print("Processing workout data for saving......")
             for workout in data:
-                workout.insert(0, username)
-            if not is_existing_user(username):
-                print(f"Creating new user record for {username}\n")
+                workout.insert(0, self.user.user_name)
+            if not self.user.is_current_user:
                 today = datetime.datetime.now()
                 today_formatted = today.strftime("%Y-%m-%d")
                 user_data = [
-                    username,
+                    self.user.user_name,
                     today_formatted,
-                    self.profile['gender'],
-                    self.profile['age'],
-                    self.profile['weight'],
-                    self.profile['height']
+                    self.user.profile['gender'],
+                    self.user.profile['age'],
+                    self.user.profile['weight'],
+                    self.user.profile['height']
                 ]
-                update_users_worksheet(user_data)
-            update_workout_worksheet(data)
+                sheet.update_users_worksheet(user_data)
+                self.user.is_current_user = True
+            sheet.update_workout_worksheet(data)

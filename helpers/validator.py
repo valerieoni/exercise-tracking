@@ -1,6 +1,7 @@
 from helpers.style import *
+import enum
 
-def validate_user_action(action: str):
+def validate_user_action(action: str, menu: enum.Enum):
     """
     checks that value for action is not empty and
     that the value passed in is either 1 or 2.
@@ -12,13 +13,10 @@ def validate_user_action(action: str):
     try:
         if not action:
             raise ValueError(
-                "You have not entered a value for action to perform"
+                "You have not entered a value"
             )
         value = int(action)
-        if value not in [1, 2]:
-            raise ValueError(
-                f"Expected value is 1 or 2. You provided {action}"
-            )
+        menu(value).name
     except ValueError as error:
         print_error(f"\nInvalid data: {error}, please try again\n")
         return False
@@ -59,9 +57,9 @@ def validate_username(value: str):
                 "You have not entered a username"
             )
         user_length = len(value)
-        if user_length < 8 or user_length > 18:
+        if user_length < 6 or user_length > 18:
             raise ValueError(
-                "Username must be between 8 and 18 characters. "
+                "Username must be between 6 and 18 characters. "
                 f"you entered {user_length} characters"
             )
     except ValueError as error:
@@ -113,6 +111,42 @@ def validate_yes_no(value: str) -> bool:
             )
     except ValueError as error:
         print_error(f"\nInvalid action value: {error}\n")
+        return False
+
+    return True
+
+def validate_int(value: str, value_name: str) -> bool:
+    """
+    validates value passed in for age
+    converts value to int and
+    checks that value is greater than 0
+    """
+    try:
+        int_value = int(value)
+        if not int_value:
+            raise ValueError(
+                f"You have not entered a valid value for {value_name}"
+            )
+    except ValueError as error:
+        print_error(f"Invalid value: {error}. Please try again")
+        return False
+
+    return True
+
+def validate_float(value: str, value_name: str) -> bool:
+    """
+    validates value passed in for age
+    converts value to int and
+    checks that value is greater than 0
+    """
+    try:
+        float_value = float(value)
+        if not float_value:
+            raise ValueError(
+                f"You have not entered a valid value for {value_name}"
+            )
+    except ValueError as error:
+        print_error(f"Invalid value: {error}. Please try again")
         return False
 
     return True
