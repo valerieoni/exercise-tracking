@@ -1,4 +1,3 @@
-import time
 import click
 from exercise_tracker import ExerciseTracker, Menu
 from helpers.validator import validate_user_action, validate_yes_no
@@ -53,12 +52,12 @@ def get_user_action() -> int:
     :returns int
     """
     while True:
-        print(" What would you like to do?")
+        print(" \nWHAT WOULD YOU LIKE TO DO?")
         print("  1 - Get calories burnt")
         print("  2 - View exercise logs")
         print("  3 - Exit")
 
-        user_action = input("\nEnter 1 or 2 to continue:\n")
+        user_action = input("\nEnter 1, 2 or 3 to continue:\n")
         if validate_user_action(user_action, Menu):
             break
 
@@ -88,38 +87,6 @@ def run_program():
             end_program()
             break
         new_exercise_tracker.perform_user_action(action)
-
-def run_program2():
-    """
-    Displays welcome message to user.
-    Creates a new instance of ExerciseTracker class.
-    Prompts the user to input 1 or 2 for action to perform from list
-    and if the value is valid it moves on to perform action
-    but if the user input is invalid, it
-    displays error message and prompts user for input again.
-    """
-    print("WELCOME TO EXERCISE TRACKER".center(TERMINAL_WIDTH))
-    print('***'.center(TERMINAL_WIDTH, '='))
-    intro()
-    new_exercise_tracker = ExerciseTracker()
-    time.sleep(1)
-    action = get_user_action()
-
-    try:
-        new_exercise_tracker.perform_user_action(action)
-    except ValueError as error:
-        print_error(f"Invalid action value: {error}")
-        get_user_action()
-
-    while True:
-        print("\nWould you like to perform another action?")
-        response = input("Please enter Y/N to continue:\n")
-        if validate_yes_no(response) and response.lower() in ['yes', 'y']:
-            action = get_user_action()
-            new_exercise_tracker.perform_user_action(action)
-        else:
-            end_program()
-            break
 
 if __name__ == '__main__':
     run_program()

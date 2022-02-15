@@ -55,7 +55,7 @@ class ExerciseTracker:
             f"user {self.user.user_name}!\n")
             return
             
-        user_workouts = sheet.get_user_workouts(user_name)
+        user_workouts = sheet.get_user_workouts(self.user.user_name)
         print(tabulate(
             user_workouts,
             headers=["date", "exercise", "duration in mins", "calories"]))
