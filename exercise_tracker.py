@@ -32,7 +32,6 @@ class ExerciseTracker:
         self.exercise = None
         self.user = user
         self.user_name = user.user_name
-        self.profile = {}
 
     def perform_user_action(self, action: Menu):
         """
@@ -50,7 +49,7 @@ class ExerciseTracker:
             raise ValueError("You must have provided a wrong value for action")
 
     def view_exercise_logs(self):
-        print("\nAmazing! you have chosen to view logs\n")
+        print("\nYou have chosen to view exercise logs\n")
         if not self.user.is_current_user:
             style.print_error("No result found for "
             f"user {self.user.user_name}!\n")
@@ -62,7 +61,7 @@ class ExerciseTracker:
             headers=["date", "exercise", "duration in mins", "calories"]))
 
     def get_calories(self):
-        print("Great!, you have chosen to get calories\n")
+        print("\nYou have chosen to get calories\n")
         profile = self.get_user_profile()
         if self.exercise is None:
             self.exercise = Exercise(
@@ -71,7 +70,7 @@ class ExerciseTracker:
             )
         data = self.exercise.get_exercise_stats()
         if not data or data is None:
-            print("No result found")
+            style.print_error("  No result found!!!\n")
             return
 
         print(tabulate(
@@ -89,54 +88,16 @@ class ExerciseTracker:
         If data entered is valid, creates Exercise instance.
         """
 
-        if len(self.profile) != 0:
-            return self.profile
+        if len(self.user.profile) != 0:
+            return self.user.profile
 
-        print("We will need your gender, age, height and weight data")
-
-        gender = self.request_gender()
-        print("\nNext is age,height in cm, weight in kg")
-        print("Example data expected: 44,162.56,69.5\n")
-        while True:
-            data_str = input("Enter your age,height_in_cm,weight_in_kg:\n")
-            data = data_str.split(',')
-            exercise_data = [i.strip() for i in data]
-            if validate_user_profile(exercise_data):
-                print("Data is valid!!!")
-                self.profile = {
-                    'gender': gender,
-                    'age': int(exercise_data[0]),
-                    'height': float(exercise_data[1]),
-                    'weight': float(exercise_data[2])
-                }
-                break
-
-        return self.profile
-
-    def request_gender(self) -> str:
-        """
-        Prompts user for a value for gender.
-        validates value and returns gender if valid
-        else displays error message to user and
-        prompts for gender value again.
-
-        :returns str
-        """
-        gender_values = {
-            'm': "male",
-            'f': "female",
-        }
-        while True:
-            value = input(
-                "Enter your gender(male/female):\n"
-            )
-            value = value.strip()
-            if validate_gender(value, gender_values):
-                break
-
-        gender = value[0:1]
-        return gender_values[gender.lower()]
-
+        print("We will need your gender, age, height and weight data\n")
+        self.user.set_gender()
+        self.user.set_age()
+        self.user.set_height()
+        self.user.set_weight()
+       
+        return self.user.profile
 
     def request_to_save(self, data):
         """
@@ -147,7 +108,7 @@ class ExerciseTracker:
         and save updated workout data to the workout sheet
         by calling the save_data from the spreadsheet instance
         """
-        print(f"Would you like to save workout data?\n{data}")
+        print(f"\nWould you like to save workout stats?\n")
 
         while True:
             response = input("Enter Y/N:\n")
@@ -155,20 +116,19 @@ class ExerciseTracker:
                 break
 
         if response.lower() in ['yes', 'y']:
-            username = self.user_name()
-            print("Saving exercise data......")
             for workout in data:
-                workout.insert(0, username)
-            if not sheet.is_existing_user(username):
+                workout.insert(0, self.user.user_name)
+            if not self.user.is_current_user:
                 today = datetime.datetime.now()
                 today_formatted = today.strftime("%Y-%m-%d")
                 user_data = [
-                    username,
+                    self.user.user_name,
                     today_formatted,
-                    self.profile['gender'],
-                    self.profile['age'],
-                    self.profile['weight'],
-                    self.profile['height']
+                    self.user.profile['gender'],
+                    self.user.profile['age'],
+                    self.user.profile['weight'],
+                    self.user.profile['height']
                 ]
                 sheet.update_users_worksheet(user_data)
+                self.user.is_current_user = True
             sheet.update_workout_worksheet(data)

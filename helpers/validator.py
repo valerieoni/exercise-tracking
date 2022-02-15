@@ -132,3 +132,21 @@ def validate_int(value: str, value_name: str) -> bool:
         return False
 
     return True
+
+def validate_float(value: str, value_name: str) -> bool:
+    """
+    validates value passed in for age
+    converts value to int and
+    checks that value is greater than 0
+    """
+    try:
+        float_value = float(value)
+        if not float_value:
+            raise ValueError(
+                f"You have not entered a valid value for {value_name}"
+            )
+    except ValueError as error:
+        print_error(f"Invalid value: {error}. Please try again")
+        return False
+
+    return True
