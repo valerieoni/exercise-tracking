@@ -50,12 +50,12 @@ class ExerciseTracker:
             raise ValueError("You must have provided a wrong value for action")
 
     def view_exercise_logs(self):
-        user_name = self.user_name
-        if not sheet.is_existing_user(user_name):
-            style.print_error(f"No result found for user {user_name}!\n")
+        print("\nAmazing! you have chosen to view logs\n")
+        if not self.user.is_current_user:
+            style.print_error("No result found for "
+            f"user {self.user.user_name}!\n")
             return
             
-        print("\nAmazing! you have chosen to view logs\n")
         user_workouts = sheet.get_user_workouts(user_name)
         print(tabulate(
             user_workouts,

@@ -80,7 +80,7 @@ def run_program():
     name = get_user_name()
     app_user = user.User(name)
     print(f" \nWelcome {app_user.user_name},\n")
-
+    
     new_exercise_tracker = ExerciseTracker(app_user)
     while True:
         action = get_user_action()

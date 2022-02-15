@@ -8,6 +8,7 @@ class User(object):
     Attributes:
     user_name (str):
     profile (dict)
+    is_current_user
     """
 
     def __init__(self, user_name):
@@ -18,7 +19,9 @@ class User(object):
         user = get_user(user_name)
         self.user_name = user_name
         self.profile = {}
+        self.is_current_user = False
         if user:
+            self.is_current_user = True
             self.profile = {
                 'gender': user.get('gender'),
                 'age': int(user.get('age')),
