@@ -1,10 +1,10 @@
 import datetime
 
-from validator import validate_gender, validate_user_profile, \
+from helpers.validator import validate_gender, validate_user_profile, \
     validate_username, validate_yes_no
-from exercise import Exercise
+from api.exercise import Exercise
 from tabulate import tabulate
-from spreadsheet import get_users, update_users_worksheet, \
+from data.spreadsheet import get_users, update_users_worksheet, \
     update_workout_worksheet, is_existing_user, get_user_workouts
 
 

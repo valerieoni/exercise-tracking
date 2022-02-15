@@ -1,9 +1,9 @@
 import time
 import click
 from exercise_tracker import ExerciseTracker
-from validator import validate_user_action, validate_yes_no
+from helpers.validator import validate_user_action, validate_yes_no
 from helpers.style import *
-
+from data.user import *
 TERMINAL_WIDTH = os.get_terminal_size().columns
 
 
