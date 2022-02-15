@@ -8,6 +8,7 @@ class User(object):
     Attributes:
     user_name (str):
     profile (dict)
+    is_current_user
     """
 
     def __init__(self, user_name):
@@ -18,7 +19,9 @@ class User(object):
         user = get_user(user_name)
         self.user_name = user_name
         self.profile = {}
+        self.is_current_user = False
         if user:
+            self.is_current_user = True
             self.profile = {
                 'gender': user.get('gender'),
                 'age': int(user.get('age')),
@@ -39,7 +42,7 @@ class User(object):
         }
         while True:
             value = input(
-                "Enter your gender(male/female):\n"
+                "  \nPlease enter gender(male/female):\n"
             )
             value = value.strip().lower()
             if validate_gender(value, gender_values):
@@ -57,9 +60,9 @@ class User(object):
         """
         while True:
             value = input(
-                "Enter age:\n"
+                "  \nPlease enter age:\n"
             )
-            if validate(value, 'age'):
+            if validate_int(value, 'age'):
                 break
 
         self.profile['age'] = int(value)
@@ -73,9 +76,9 @@ class User(object):
         """
         while True:
             value = input(
-                "Enter height in cm:\n"
+                "  \nPlease enter height in cm:\n"
             )
-            if validate(value, 'height'):
+            if validate_float(value, 'height'):
                 break
 
         self.profile['height'] = float(value)
@@ -89,9 +92,9 @@ class User(object):
         """
         while True:
             value = input(
-                "Enter Weight in kg:\n"
+                "  \nPlease enter Weight in kg:\n"
             )
-            if validate(value, 'weight'):
+            if validate_float(value, 'weight'):
                 break
 
         self.profile['weight'] = float(value)

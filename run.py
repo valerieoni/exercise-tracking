@@ -1,13 +1,13 @@
-import time
 import click
-from exercise_tracker import ExerciseTracker
+from exercise_tracker import ExerciseTracker, Menu
 from helpers.validator import validate_user_action, validate_yes_no
 from helpers.style import *
-from data.user import *
+import data.user as user
+import helpers.validator as validate
+
 TERMINAL_WIDTH = os.get_terminal_size().columns
 
-
-def intro():
+def intro_message():
     """
     prints out the information about exercise tracker
     and the list of actions user can perform
@@ -17,9 +17,21 @@ def intro():
     print("  - Save the new exercise data")
     print("  - View logs you previously entered\n")
 
-    print(" You will be required to enter a valid username "
-          "to view logs or save new exercise data\n")
 
+def get_user_name():
+    """
+    Prompts user from username.
+    checks username entered is valid data and
+    returns username if valid otherwise prompts user for username
+    """
+
+    while True:
+        input_value = input("Please enter a user name:\n")
+        user_name = input_value.strip()
+        if validate.validate_username(user_name):
+            break
+
+    return user_name
 
 def end_program():
     """
@@ -40,16 +52,17 @@ def get_user_action() -> int:
     :returns int
     """
     while True:
-        print(" What would you like to do?")
-        print("  1 - get calories burnt")
-        print("  2 - view exercise logs")
+        print(" \nWHAT WOULD YOU LIKE TO DO?")
+        print("  1 - Get calories burnt")
+        print("  2 - View exercise logs")
+        print("  3 - Exit")
 
-        user_action = input("\nEnter 1 or 2 to continue:\n")
-        if validate_user_action(user_action):
+        user_action = input("\nEnter 1, 2 or 3 to continue:\n")
+        if validate_user_action(user_action, Menu):
             break
 
-    return int(user_action)
-
+    value = int(user_action)
+    return Menu(value)
 
 def run_program():
     """
@@ -62,26 +75,18 @@ def run_program():
     """
     print("WELCOME TO EXERCISE TRACKER".center(TERMINAL_WIDTH))
     print('***'.center(TERMINAL_WIDTH, '='))
-    intro()
-    new_exercise_tracker = ExerciseTracker()
-    time.sleep(1)
-    action = get_user_action()
-
-    try:
-        new_exercise_tracker.perform_user_action(action)
-    except ValueError as error:
-        print_error(f"Invalid action value: {error}")
-        get_user_action()
-
+    intro_message()
+    name = get_user_name()
+    app_user = user.User(name)
+    print(f" \nWelcome {app_user.user_name},\n")
+    
+    new_exercise_tracker = ExerciseTracker(app_user)
     while True:
-        print("\nWould you like to perform another action?")
-        response = input("Please enter Y/N to continue:\n")
-        if validate_yes_no(response) and response.lower() in ['yes', 'y']:
-            action = get_user_action()
-            new_exercise_tracker.perform_user_action(action)
-        else:
+        action = get_user_action()
+        if action == Menu.EXIT:
             end_program()
             break
+        new_exercise_tracker.perform_user_action(action)
 
 if __name__ == '__main__':
     run_program()
