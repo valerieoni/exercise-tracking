@@ -1,18 +1,21 @@
 import datetime
 import enum
-from helpers.validator import validate_gender, validate_user_profile, \
-    validate_username, validate_yes_no
-from api.exercise import Exercise
 from tabulate import tabulate
+from helpers.validator import validate_yes_no
+from api.exercise import Exercise
 import data.spreadsheet as sheet
 import data.user as User
 import helpers.style as style
 
+
 class Menu(enum.Enum):
+    """
+    actions from which user can select.
+    """
     CALORIES = 1
     EXERCISE_LOGS = 2
     EXIT = 3
-    
+
 
 class ExerciseTracker:
     """
@@ -49,18 +52,26 @@ class ExerciseTracker:
             raise ValueError("You must have provided a wrong value for action")
 
     def view_exercise_logs(self):
+        """
+        Retrieves exercise records from sheet and
+        prints them to the console.
+        """
         print("\nYou have chosen to view exercise logs\n")
         if not self.user.is_current_user:
             style.print_error("No result found for "
-            f"user {self.user.user_name}!\n")
+                              f"user {self.user.user_name}!\n")
             return
-            
+
         user_workouts = sheet.get_user_workouts(self.user.user_name)
         print(tabulate(
             user_workouts,
             headers=["date", "exercise", "duration in mins", "calories"]))
 
     def get_calories(self):
+        """
+        creates an Exercise instance if not existing and
+        calls method to get calories from the instance
+        """
         print("\nYou have chosen to get calories\n")
         profile = self.get_user_profile()
         if self.exercise is None:
@@ -96,7 +107,7 @@ class ExerciseTracker:
         self.user.set_age()
         self.user.set_height()
         self.user.set_weight()
-       
+
         return self.user.profile
 
     def request_to_save(self, data):
@@ -108,7 +119,7 @@ class ExerciseTracker:
         and save updated workout data to the workout sheet
         by calling the save_data from the spreadsheet instance
         """
-        print(f"\nWould you like to save workout stats?\n")
+        print("\nWould you like to save workout stats?\n")
 
         while True:
             response = input("Enter Y/N:\n")

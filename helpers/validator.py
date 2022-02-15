@@ -1,5 +1,6 @@
-from helpers.style import *
+from helpers.style import print_error
 import enum
+
 
 def validate_user_action(action: str, menu: enum.Enum):
     """
@@ -91,6 +92,7 @@ def validate_gender(value: str, expected_values) -> bool:
 
     return True
 
+
 def validate_yes_no(value: str) -> bool:
     """
     gets the first letter of the value
@@ -107,13 +109,14 @@ def validate_yes_no(value: str) -> bool:
         response = value[0:1]
         if response.lower() not in ['y', 'n']:
             raise ValueError(
-                f"Expected value is either Y, Yes, N or No, you provided {value}"
+                f"Expected value is Y/N, you provided {value}"
             )
     except ValueError as error:
         print_error(f"\nInvalid action value: {error}\n")
         return False
 
     return True
+
 
 def validate_int(value: str, value_name: str) -> bool:
     """
@@ -132,6 +135,7 @@ def validate_int(value: str, value_name: str) -> bool:
         return False
 
     return True
+
 
 def validate_float(value: str, value_name: str) -> bool:
     """
