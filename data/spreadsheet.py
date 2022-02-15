@@ -31,6 +31,7 @@ def get_users():
     users = USERS_SHEET.get_all_values()
     return users[1:]
 
+
 def get_user_workouts(user_name):
     """
     get workouts from workouts worksheet
@@ -44,6 +45,7 @@ def get_user_workouts(user_name):
         if workout[0] == user_name:
             user_workouts.append(workout[1:])
     return user_workouts
+
 
 def update_users_worksheet(data):
     """
@@ -63,6 +65,7 @@ def update_workout_worksheet(data):
     print("Updating workout worksheet.......\n")
     WORKOUT_SHEET.append_rows(data)
     print("workout successfully added to the workout worksheet.\n")
+
 
 def is_existing_user(user_name) -> bool:
     """
