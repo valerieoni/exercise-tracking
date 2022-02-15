@@ -35,7 +35,7 @@ class Exercise:
             "height_cm": self.height,
             "age": self.age
         }
-        print("Retrieving exercise and calories information..........")
+        print("\nSearching.................")
 
         try:
             response = requests.post(
@@ -44,14 +44,9 @@ class Exercise:
             status = response.status_code
 
             if status == 200:
-                print("Request successful. parsing data....\n")
                 return self.parse_exercise_stats(
                  response.json()
                 )
-            elif status == 404:
-                raise Exception("Resource not found on server")
-            else:
-                raise Exception("Unable to process request")
         except Exception as exception:
             print(f"Request processing failed: {exception} ")
             return None

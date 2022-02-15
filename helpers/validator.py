@@ -1,3 +1,5 @@
+from helpers.style import *
+
 def validate_user_action(action: str):
     """
     checks that value for action is not empty and
@@ -18,7 +20,7 @@ def validate_user_action(action: str):
                 f"Expected value is 1 or 2. You provided {action}"
             )
     except ValueError as error:
-        print(f"\nInvalid data: {error}, please try again\n")
+        print_error(f"\nInvalid data: {error}, please try again\n")
         return False
 
     return True
@@ -37,7 +39,7 @@ def validate_user_profile(values):
             )
         [float(value) for value in values]
     except ValueError as error:
-        print(f"Invalid data: {error}, please try again")
+        print_error(f"Invalid data: {error}, please try again")
         return False
 
     return True
@@ -63,7 +65,7 @@ def validate_username(value: str):
                 f"you entered {user_length} characters"
             )
     except ValueError as error:
-        print(f"\nInvalid data: {error}, please try again\n")
+        print_error(f"\nInvalid data: {error}, please try again\n")
         return False
 
     return True
@@ -86,7 +88,7 @@ def validate_gender(value: str, expected_values) -> bool:
                 f"Expected value is m or f, you provided {value}"
             )
     except ValueError as error:
-        print(f"\nInvalid action value: {error}\n")
+        print_error(f"\nInvalid action value: {error}\n")
         return False
 
     return True
@@ -110,7 +112,7 @@ def validate_yes_no(value: str) -> bool:
                 f"Expected value is either Y, Yes, N or No, you provided {value}"
             )
     except ValueError as error:
-        print(f"\nInvalid action value: {error}\n")
+        print_error(f"\nInvalid action value: {error}\n")
         return False
 
     return True
