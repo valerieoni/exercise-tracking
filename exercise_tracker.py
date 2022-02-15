@@ -1,12 +1,18 @@
 import datetime
-
+import enum
 from helpers.validator import validate_gender, validate_user_profile, \
     validate_username, validate_yes_no
 from api.exercise import Exercise
 from tabulate import tabulate
-from data.spreadsheet import get_users, update_users_worksheet, \
-    update_workout_worksheet, is_existing_user, get_user_workouts
+import data.spreadsheet as sheet
+import data.user as User
+import helpers.style as style
 
+class Menu(enum.Enum):
+    CALORIES = 1
+    EXERCISE_LOGS = 2
+    EXIT = 3
+    
 
 class ExerciseTracker:
     """
@@ -19,15 +25,16 @@ class ExerciseTracker:
     profile (dict): dictionary values set from use input
     """
 
-    def __init__(self):
+    def __init__(self, user: User):
         """
         Sets default values for the instance attributes.
         """
         self.exercise = None
-        self.user_name = None
+        self.user = user
+        self.user_name = user.user_name
         self.profile = {}
 
-    def perform_user_action(self, action: int):
+    def perform_user_action(self, action: Menu):
         """
         Valid action expected is 1 or 2. Raises ValueError if value is invalid.
         if action is 1 it creates an Exercise instance if not existing and
@@ -35,21 +42,21 @@ class ExerciseTracker:
         Else if action is 2 then prompt user for username and
         displays the exercise log.
         """
-        if action == 1:
+        if action == Menu.CALORIES:
             self.get_calories()
-        elif action == 2:
+        elif action == Menu.EXERCISE_LOGS:
             self.view_exercise_logs()
         else:
             raise ValueError("You must have provided a wrong value for action")
 
     def view_exercise_logs(self):
-        print("Amazing! you have chosen to view logs\n")
-        user_name = self.get_user_name()
-        if not is_existing_user(user_name):
-            print(f"No result found for user {user_name}!")
+        user_name = self.user_name
+        if not sheet.is_existing_user(user_name):
+            style.print_error(f"No result found for user {user_name}!\n")
             return
-
-        user_workouts = get_user_workouts(user_name)
+            
+        print("\nAmazing! you have chosen to view logs\n")
+        user_workouts = sheet.get_user_workouts(user_name)
         print(tabulate(
             user_workouts,
             headers=["date", "exercise", "duration in mins", "calories"]))
@@ -130,24 +137,6 @@ class ExerciseTracker:
         gender = value[0:1]
         return gender_values[gender.lower()]
 
-    def get_user_name(self):
-        """
-        Prompts user from username.
-        checks username entered is valid data and
-        returns username if valid otherwise prompts user for username
-        """
-        if self.user_name is not None:
-            return self.user_name
-
-        print("Your user name is required to retrieve/save your information.\n")
-        while True:
-            value = input("Please enter username:\n")
-            user_name = value.strip()
-            if validate_username(user_name):
-                self.user_name = user_name
-                break
-
-        return user_name
 
     def request_to_save(self, data):
         """
@@ -163,16 +152,14 @@ class ExerciseTracker:
         while True:
             response = input("Enter Y/N:\n")
             if validate_yes_no(response):
-                print(f"you have answered {response}")
                 break
 
         if response.lower() in ['yes', 'y']:
-            username = self.get_user_name()
-            print("Processing workout data for saving......")
+            username = self.user_name()
+            print("Saving exercise data......")
             for workout in data:
                 workout.insert(0, username)
-            if not is_existing_user(username):
-                print(f"Creating new user record for {username}\n")
+            if not sheet.is_existing_user(username):
                 today = datetime.datetime.now()
                 today_formatted = today.strftime("%Y-%m-%d")
                 user_data = [
@@ -183,5 +170,5 @@ class ExerciseTracker:
                     self.profile['weight'],
                     self.profile['height']
                 ]
-                update_users_worksheet(user_data)
-            update_workout_worksheet(data)
+                sheet.update_users_worksheet(user_data)
+            sheet.update_workout_worksheet(data)
