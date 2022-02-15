@@ -1,11 +1,13 @@
+import os
 import click
+from colorama import Fore
 from exercise_tracker import ExerciseTracker, Menu
-from helpers.validator import validate_user_action, validate_yes_no
-from helpers.style import *
+from helpers.validator import validate_user_action
 import data.user as user
 import helpers.validator as validate
 
 TERMINAL_WIDTH = os.get_terminal_size().columns
+
 
 def intro_message():
     """
@@ -33,16 +35,22 @@ def get_user_name():
 
     return user_name
 
+
 def end_program():
     """
     displays exit text to user and exits the program after 2 seconds
     """
     click.clear()
     print('\n')
-    print("Thank you for using Exercise Tracker. Good Bye!!!".center(TERMINAL_WIDTH))
+    print("Thank you for using Exercise Tracker. Good Bye!!!"
+          .center(TERMINAL_WIDTH))
+    print("\n")
+    print("Click on the Run Program button to restart."
+          .center(TERMINAL_WIDTH))
     print("\n\n")
     print(Fore.GREEN + f"{'*' * 10}\033[01m The natural language search "
-                       f"is powered by nutriontix.com {'*' * 10}".center(TERMINAL_WIDTH))
+                       f"is powered by nutriontix.com {'*' * 10}"
+                       .center(TERMINAL_WIDTH))
 
 
 def get_user_action() -> int:
@@ -64,6 +72,7 @@ def get_user_action() -> int:
     value = int(user_action)
     return Menu(value)
 
+
 def run_program():
     """
     Displays welcome message to user.
@@ -79,7 +88,6 @@ def run_program():
     name = get_user_name()
     app_user = user.User(name)
     print(f" \nWelcome {app_user.user_name},\n")
-    
     new_exercise_tracker = ExerciseTracker(app_user)
     while True:
         action = get_user_action()
@@ -87,6 +95,7 @@ def run_program():
             end_program()
             break
         new_exercise_tracker.perform_user_action(action)
+
 
 if __name__ == '__main__':
     run_program()
