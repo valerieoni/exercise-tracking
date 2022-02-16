@@ -16,3 +16,10 @@ def print_success(text: str):
     print green text to console
     """
     print(Fore.GREEN + Style.BRIGHT + text)
+
+
+def print_info(text: str):
+    """
+    print blue text to console
+    """
+    print(Fore.BLUE + Style.BRIGHT + text)

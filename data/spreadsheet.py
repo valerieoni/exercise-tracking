@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+from helpers.style import print_success
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -52,9 +53,9 @@ def update_users_worksheet(data):
     updates the users worksheet, and adds
      a new row with the list data provided
     """
-    print("Updating users worksheet.......\n")
+    print("Updating users worksheet...\n")
     USERS_SHEET.append_row(data)
-    print("users worksheet successfully updated.\n")
+    print_success("users worksheet successfully updated.\n")
 
 
 def update_workout_worksheet(data):
@@ -62,20 +63,9 @@ def update_workout_worksheet(data):
     updates the workouts worksheet, and adds
      a new row with the list data provided
     """
-    print("Updating workout worksheet.......\n")
+    print("Updating workout data...\n")
     WORKOUT_SHEET.append_rows(data)
-    print("workout successfully added to the workout worksheet.\n")
-
-
-def is_existing_user(user_name) -> bool:
-    """
-    gets the lists of users from the worksheet,
-    extracts the first column which is the username and
-    returns true if username is in the list, returns false otherwise
-    """
-    users = get_users()
-    user_names = [user[0] for user in users]
-    return user_name in user_names
+    print_success("workout successfully added.\n")
 
 
 def get_user(user_name: str):

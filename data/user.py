@@ -1,5 +1,6 @@
 from data.spreadsheet import get_user
-from helpers.validator import *
+from helpers.validator import validate_gender,\
+    validate_float, validate_int
 
 
 class User(object):

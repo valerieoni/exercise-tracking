@@ -52,7 +52,10 @@ The goal of the project is to design a console based workout tracker which logs 
 
     ### Design
     -   #### Colour Scheme
-        -   The main colors used for this project are white, red and green.
+        The main colors used for this project are white, red, blue and green.
+        - Red text was used to display error messages.
+        - while green for attribution and success messages after successfully adding user data after the worksheet. 
+        - Blue color was used to display example input
     
     ### Wireframes
     -   Home Page Wireframe
@@ -70,7 +73,7 @@ The goal of the project is to design a console based workout tracker which logs 
 
 -   ### Initial Concept
 
-    The application is a console application which takes work out input from the user and get the calories based on the workout type and duration. I anticipate using google sheets API for storing the data provided by the user, and [nutritionix API](https://developer.nutritionix.com/) for retrieving the calorie information.
+    The application is a console application which takes exercise input from the user and get the calories based on the workout type and duration. google sheets API was used for storing the data provided by the user, and [nutritionix API](https://developer.nutritionix.com/) for retrieving the calorie information.
 
 
 ## Program Design
@@ -115,7 +118,7 @@ The goal of the project is to design a console based workout tracker which logs 
 ## Testing
 
 ### Testing Code
-Pep8 Online Checker was used to validate each page of the project.
+Pep8 Online Checker was used to validate each page of the project. Errors found were fixed and the pages were tested again to ensure there were no syntax errors.
 
 
 ### Testing User Stories from User Experience (UX) Section
@@ -144,14 +147,26 @@ Pep8 Online Checker was used to validate each page of the project.
        - if user chooses to save, then the information is saved in the google sheet
        
 ### Known Bugs
-- 
+#### Current
+- Using Microsoft Edge browser, when a user chooses to view exercise logs and no records are found, the error message printed out does not contain special characters such as '_' if present in a user name. In the image below, this is highlighted in yellow.
+
+![Username bug](./readme_docs/images/testing/user_name.png)
+
+#### Resolved
+- When prompted for exercise the user did, if no result was returned an empty array was printed out the console.
+- In the initial design of the program a user was not asked for user name unless they wanted to view logs or save exercise data. This made the program less user friendly as a result the program was modified to prompt the user for a username at the start of the program.
 
 ## Deployment
 
 ### Setup API credentials and google spreadsheet
 - create a new [Google sheet](https://www.google.co.uk/sheets/about/)
+    - name the sheet exercise-workout.
     - The sheet should have 2 worksheets and with fields shown in [data model](#data-model)
-- from Google cloud create a new project and get API credentials and download credentials file
+- from Google cloud create a new project and activate your API credentials
+    - from the project's dashboard, select **APIs & Services** and click on Library
+    - search for Google Drive API and click on Enable button
+    - from the Google Drive API click Create Credentials button and fill out the form.  
+    - and get API credentials and download credentials file
 - sign up for an API key on [Nutritionix API website](https://developer.nutritionix.com/)
 - verify email and login. Once logged in you can view your ID and KEY
 
@@ -176,7 +191,8 @@ $ git clone https://github.com/valerieoni/exercise-tracking
 
 ### Heroku
 
-The project was deployed to heroku. Heroku is 
+The project was deployed to [Heroku](https://www.heroku.com/).
+
 #### Prerequisites:
 - you forked or copied this project into your repository on GitHub.
 - Heroku requires these files to deploy successfully, they are both in the root folder of the project:
@@ -220,6 +236,9 @@ Follow these steps to deploy the app from GitHub to Heroku:
 5. Click "Save" button to save the changes and this will trigger the site deploymment automatically.
 6. When you refresh the page, you will see that the site has been successfully published, along with a link to the published site.
 
+## Code
+- [Stack Overflow](https://stackoverflow.com/questions/43634618/how-do-i-test-if-int-value-exists-in-python-enum-without-using-try-catch) - for checking that a value exists in  Enum
+- [Stack Overflow](https://stackoverflow.com/questions/16511337/correct-way-to-try-except-using-python-requests-module) - for requests exceptions
 
 ## Credits
 - The application template was provided by Code Institute.

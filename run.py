@@ -18,6 +18,8 @@ def intro_message():
     print("  - View the calories you have burnt exercising.")
     print("  - Save the new exercise data")
     print("  - View logs you previously entered\n")
+    print("\nYou are required to enter a user name "
+          "between 6 to 18 characters to continue.")
 
 
 def get_user_name():
@@ -26,7 +28,6 @@ def get_user_name():
     checks username entered is valid data and
     returns username if valid otherwise prompts user for username
     """
-
     while True:
         input_value = input("Please enter a user name:\n")
         user_name = input_value.strip()
