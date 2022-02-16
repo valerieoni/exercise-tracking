@@ -1,8 +1,8 @@
+from enum import Enum
 from helpers.style import print_error
-import enum
 
 
-def validate_user_action(action: str, menu: enum.Enum):
+def validate_user_action(action: str, menu: Enum):
     """
     checks that value for action is not empty and
     that the value passed in is either 1 or 2.
@@ -17,28 +17,12 @@ def validate_user_action(action: str, menu: enum.Enum):
                 "You have not entered a value"
             )
         value = int(action)
-        menu(value).name
+        if not any(member.value == value for member in menu):
+            raise ValueError(
+                f"{value} is not on the list"
+            )
     except ValueError as error:
         print_error(f"\nInvalid data: {error}, please try again\n")
-        return False
-
-    return True
-
-
-def validate_user_profile(values):
-    """
-    Expects values to be an array of 3 elements.
-    Raises ValueError if there aren't exactly 3 values
-    or values cannot be converted to int and float
-    """
-    try:
-        if len(values) != 3:
-            raise ValueError(
-                f"Exactly 3 values required, you provided {len(values)}"
-            )
-        [float(value) for value in values]
-    except ValueError as error:
-        print_error(f"Invalid data: {error}, please try again")
         return False
 
     return True

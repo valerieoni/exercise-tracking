@@ -1,7 +1,9 @@
-import requests
 import os
-from dotenv import load_dotenv, find_dotenv
 from datetime import date
+import requests
+from dotenv import load_dotenv, find_dotenv
+import helpers.style as style
+
 
 class Exercise:
     """
@@ -19,14 +21,16 @@ class Exercise:
         self.weight = weight_in_kg
         self.headers = self.get_header()
 
-
-    def get_exercise_stats(self):
+    def get_exercise_stats(self) -> []:
         """
         gets exercise stats with natural language queries.
+        calls parse_exercise_stats passing in the json as the parameter.
+        returns an array of the formatted json or an empty array.
         """
-        print("To get calories for the exercise(s), you can type in text "
-              "like ran 5k and danced for 30 minutes\n")
-        exercise_text = input("Tell me which exercises you did\n")
+        print("\nTo get calories for the exercise(s), you can "
+              "type in text like ran 5k and"
+              " danced for 30 minutes\n")
+        exercise_text = input("What exercise(s) did you do?\n")
 
         parameters = {
             "query": exercise_text,
@@ -35,7 +39,7 @@ class Exercise:
             "height_cm": self.height,
             "age": self.age
         }
-        print("\nSearching.................")
+        print("\nSearching...")
 
         try:
             response = requests.post(
@@ -43,13 +47,15 @@ class Exercise:
                 )
             status = response.status_code
 
-            if status == 200:
-                return self.parse_exercise_stats(
-                 response.json()
-                )
-        except Exception as exception:
-            print(f"Request processing failed: {exception} ")
-            return None
+            if status != 200:
+                style.print_error(" Unable to process request")
+                return []
+            return self.parse_exercise_stats(
+                response.json()
+            )
+        except requests.ConnectionError:
+            style.print_error(" Unable to process request")
+            return []
 
     def parse_exercise_stats(self, data):
         """
@@ -65,7 +71,8 @@ class Exercise:
                 calories
                 ]
         for example ['2022-10-02', 'running', 18.65, 204.09]
-        or an array of arrays [['2022-10-02', 'running', 18.65, 204.09], ['2022-10-02', 'walking', 15, 58.63]]
+        or an array of arrays [['2022-10-02', 'running', 18.65, 204.09],
+        ['2022-10-02', 'walking', 15, 58.63]]
         """
         today = date.today()
         today_formatted = today.strftime("%Y-%m-%d")

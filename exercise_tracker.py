@@ -1,5 +1,5 @@
 import datetime
-import enum
+from enum import Enum
 from tabulate import tabulate
 from helpers.validator import validate_yes_no
 from api.exercise import Exercise
@@ -8,7 +8,7 @@ import data.user as User
 import helpers.style as style
 
 
-class Menu(enum.Enum):
+class Menu(Enum):
     """
     actions from which user can select.
     """
@@ -49,7 +49,7 @@ class ExerciseTracker:
         elif action == Menu.EXERCISE_LOGS:
             self.view_exercise_logs()
         else:
-            raise ValueError("You must have provided a wrong value for action")
+            raise ValueError("You have provided a wrong value for action")
 
     def view_exercise_logs(self):
         """
@@ -102,7 +102,7 @@ class ExerciseTracker:
         if len(self.user.profile) != 0:
             return self.user.profile
 
-        print("We will need your gender, age, height and weight data\n")
+        print("Please enter values for gender, age, height and weight data\n")
         self.user.set_gender()
         self.user.set_age()
         self.user.set_height()
