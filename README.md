@@ -88,7 +88,7 @@ The goal of the project is to design a console based workout tracker which logs 
     <p align="center"><img src="./readme_docs/images/program_structure.png"></p>
 
 -   ### Data Model
-    <p align="center"><img src="./readme_docs/images/data_model/data_model.png"></p>
+    <p align="center"><img src="./readme_docs/images/data_model/data_model_2.png"></p>
 
     Data from the user are stored in google sheets. The workbook comprises of two worksheets:
     - users - for storing the user profile
@@ -239,6 +239,7 @@ Follow these steps to deploy the app from GitHub to Heroku:
 ## Code
 - [Stack Overflow](https://stackoverflow.com/questions/43634618/how-do-i-test-if-int-value-exists-in-python-enum-without-using-try-catch) - for checking that a value exists in  Enum
 - [Stack Overflow](https://stackoverflow.com/questions/16511337/correct-way-to-try-except-using-python-requests-module) - for requests exceptions
+- [Understanding Explicit and Implicit](https://miguelgfierro.com/blog/2018/python-pro-tips-understanding-explicit-is-better-than-implicit/)
 
 ## Credits
 - The application template was provided by Code Institute.
