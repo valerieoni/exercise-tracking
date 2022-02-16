@@ -32,7 +32,7 @@ def validate_username(value: str):
     """
     checks that user_name is not empty.
     Strips leading and trailing spaces from value passed in and
-    checks that the value's length is between 8 and 16 long
+    checks that the value's length is between 6 and 18 long
 
     :returns bool
     """

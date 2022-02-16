@@ -27,10 +27,10 @@ class Exercise:
         calls parse_exercise_stats passing in the json as the parameter.
         returns an array of the formatted json or an empty array.
         """
-        print("\nTo get calories for the exercise(s), you can "
-              "type in text like ran 5k and"
-              " danced for 30 minutes\n")
-        exercise_text = input("What exercise(s) did you do?\n")
+        print("\nTo get calories for the exercise(s),"
+              " you can type in text like:")
+        style.print_info("      ran 5k and danced for 30 minutes")
+        exercise_text = input("\n What exercise(s) did you do?\n")
 
         parameters = {
             "query": exercise_text,
